@@ -117,13 +117,11 @@ $(function() {
 
             loadFeed(0, function(){
                 firstContent = document.getElementsByClassName('feed')[0].firstElementChild.innerText;
-                console.log(firstContent);
             });
 
             loadFeed(1, function(){
                 try {
                     secondContent = document.getElementsByClassName('feed')[0].firstElementChild.innerText;
-                    console.log(secondContent);
                     done();
                 } catch (e){
                     done.fail(e);
