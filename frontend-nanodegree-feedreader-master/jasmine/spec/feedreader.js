@@ -59,8 +59,7 @@ $(function() {
          */
          it('menu display hidden by default', function(){
             const body = document.getElementsByTagName('body');
-            const classValue = body[0].classList.value;
-            expect(classValue).toEqual('menu-hidden');
+            expect(body[0].classList.contains('menu-hidden')).toEqual(true);
 
          });
 
@@ -92,9 +91,9 @@ $(function() {
             });
          });
 
-         it('at least 1 element in feed container when loadFeed first is called',function(done){
-            let feed = document.getElementsByClassName('feed')[0];
-            expect(feed.childElementCount).toBeGreaterThanOrEqual(1);
+         it('at least 1 entry element in feed container when loadFeed first is called',function(done){
+            let entries = document.querySelector('.feed').querySelectorAll('.entry').length;
+            expect(entries).toBeGreaterThanOrEqual(1);
             done();
          });
     });
@@ -106,30 +105,31 @@ $(function() {
         /* A test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-         let firstContent; 
-         let secondContent; 
+        let firstContent;
+        let secondContent;
 
-         beforeEach(function(done){
+        beforeEach(
 
-            loadFeed(0, function(){
+        function(done) {
+
+            loadFeed(0, function() {
                 firstContent = document.getElementsByClassName('feed')[0].firstElementChild.innerText;
+
+                loadFeed(1, function() {
+                    try {
+                        secondContent = document.getElementsByClassName('feed')[0].firstElementChild.innerText;
+                        done();
+                    } catch (e){
+                        done.fail(e);
+                    }
+                });
             });
+        });
 
-            loadFeed(1, function(){
-                try {
-                    secondContent = document.getElementsByClassName('feed')[0].firstElementChild.innerText;
-                    done();
-                } catch (e){
-                    done.fail(e);
-                }
-            });
-
-         });
-
-         it('expect that feed content has changed', function(done){
-                expect(firstContent).not.toBe(secondContent);
-                done();
-         });
+        it('expect that feed content has changed', function(done){
+            expect(firstContent).not.toBe(secondContent);  
+            done();
+        });
     });
 
 }());
